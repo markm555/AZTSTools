@@ -4,7 +4,9 @@
 #
 #********************************************************************************************************************
 #**  AZ Cost
-#**  Developed 9/28/2024
+#**  Developed 9/22/2024 - pull minimal information from API
+#**  Modified 9/29/2024 - pull all available information from the API and split api calls to pull no more than 15
+#**                       dimentions per call
 #**  Author: Mark Moore
 #**
 #**  This script will make api calls to the Azure API to pull azure cost data for a given date range and
