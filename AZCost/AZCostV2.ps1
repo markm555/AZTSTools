@@ -16,11 +16,11 @@
 #$tenantID = "<TenantID>"
 #$clientId = "<clientID>"
 #$clientSecret = "<clientSecret>"
-$subscriptionId = "2a56faef-72cb-41c1-a27f-02ee618907b8"
+$subscriptionId = "<YoursubscriptionID>"
 # SQL Server connection details
-$serverName = "db.moorecasa.com"
-$databaseName = "AZCost"
-$tableName = "History"
+$serverName = "<YourSQLServer"
+$databaseName = "AZCost" #Change this to another name if desired
+$tableName = "History" #Change this to another name if desired
 $startDate = "2024-01-01T00:00:00Z"  #Date format can be "2024-09-01T00:00:00Z" or "2024-09-01"
 $endDate   = "2024-09-29T23:59:59Z"
 $connectionString = "Server=$serverName;Database=master;User ID=<yourusername>;Password=<yourpassword>;TrustServerCertificate=True;"
