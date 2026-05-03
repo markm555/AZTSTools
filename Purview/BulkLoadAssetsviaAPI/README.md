@@ -1,123 +1,195 @@
+# MIT License
 
-Markdown# Purview Bulk Asset Loader (Excel + Python)## OverviewThis repository contains two Python utilities designed to demonstrate and enable **bulk asset creation in Microsoft Purview using Excel or CSV input**.These scripts are intended for:- ✅ Customer scenarios (bulk loading real metadata from spreadsheets)- ✅ Demo scenarios (quickly generating sample data for testing)---## Components### 1. `createDemoExcel.py`Generates a sample Excel (`.xlsx`) and CSV (`.csv`) file for testing or demonstration purposes.#### What it does- Creates 100 sample assets with realistic metadata- Includes required Purview fields and custom attributes- Provides a ready-to-use spreadsheet for ingestion#### Output Files- `assets.xlsx` → Primary input for ingestion- `assets_100.csv` → Fallback / troubleshooting format#### Sample Columns| Column                          | Description                          ||---------------------------------|--------------------------------------|| typeName                        | Purview asset type                   || qualifiedName                   | Unique identifier in the catalog     || name                            | Asset display name                   || description                     | Asset description                    || owner                           | Owner email                          || customAttributes.domain         | Business domain                      || customAttributes.priority       | Priority classification              || customAttributes.sensitive      | Sensitivity indicator                || customAttributes.costCenter     | Cost center value                    |---### 2. `BulkLoadFromExcel.py`Reads the Excel file and performs bulk asset creation (or update) in Microsoft Purview using the API.#### What it does- Reads structured data from Excel or CSV- Maps columns to Purview entity attributes- Creates or updates assets in Purview- Supports custom attributes dynamically> NOTE: This script assumes API authentication and endpoint configuration are handled (e.g., Azure AD token).---## End-to-End Workflow### Step 1 – Generate Sample Data (Optional)```bashpython createDemoExcel.pyShow more lines
+Copyright (c) 2026 Mark Moore
 
-License (MIT)
-Plain TextMIT LicenseCopyright (c) 2026 Mark MoorePermission is hereby granted, free of charge, to any person obtaining a copyof this software and associated documentation files (the “Software”), 
-to dealin the Software without restriction, including without limitation the rightsto use, copy, modify, merge, publish, distribute, sublicense, and/or sellcopies of the Software, and to permit 
-persons to whom the Software isfurnished to do so, subject to the following conditions:The above copyright notice and this permission notice shall be included in allcopies or substantial portions 
-of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to do so, subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS ORIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THEAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHERLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH 
-THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THESOFTWARE.Show more lines
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Creates:
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-assets.xlsx
-assets_100.csv
+
+# Purview Bulk Asset Loader (Excel + Python)
+
+## Overview
+
+This repository contains two Python scripts for demonstrating and enabling
+bulk asset creation in Microsoft Purview using Excel or CSV input.
+
+These scripts support:
+- Customer scenarios (loading real metadata from spreadsheets)
+- Demo scenarios (generating sample data quickly)
+
+---
+
+## Components
+
+### createDemoExcel.py
+
+Generates a sample Excel and CSV file with asset metadata for testing and demos.
+
+What it does:
+- Creates 100 sample assets
+- Includes standard Purview fields and custom attributes
+- Outputs two files:
+  - assets.xlsx
+  - assets_100.csv
+
+Example columns:
+- typeName  
+- qualifiedName  
+- name  
+- description  
+- owner  
+- customAttributes.domain  
+- customAttributes.priority  
+- customAttributes.sensitive  
+- customAttributes.costCenter  
+
+---
+
+### BulkLoadFromExcel.py
+
+Reads the Excel file and performs bulk asset creation or updates in Purview.
+
+What it does:
+- Reads Excel or CSV input
+- Maps columns to Purview entity attributes
+- Calls the Purview REST API to create or update assets
+
+Note:
+Authentication and endpoint configuration must be provided in the script.
+
+---
+
+## End-to-End Workflow
+
+Step 1 – Generate demo data (optional)
+
+    python createDemoExcel.py
+
+Outputs:
+- assets.xlsx
+- assets_100.csv
 
 
-Step 2 – Modify Spreadsheet (Customer Scenario)
+Step 2 – Modify spreadsheet (customer scenario)
+
 Customers can:
-
-Replace rows with real data
-Add/remove columns
-Maintain required fields:
-
-qualifiedName
-name
-typeName (optional if defaulted)
+- Replace rows with real data
+- Add or remove columns
+- Maintain required fields:
+  - qualifiedName
+  - name
+  - typeName (optional if defaulted)
 
 
+Step 3 – Load data into Purview
 
+    python BulkLoadFromExcel.py
 
-Step 3 – Bulk Load into Purview
-Shellpython BulkLoadFromExcel.pyShow more lines
-This will:
+---
 
-Read the spreadsheet
-Construct API payloads
-Create or update assets in Purview
+## Customization Guide
 
-
-Customization Guide
-Adding Custom Attributes
-To add new attributes:
-
+### Adding new attributes
 
 Add a column in Excel:
-customAttributes.<attributeName>
+
+    customAttributes.<attributeName>
+
+Example:
+
+    customAttributes.dataOwner
+    customAttributes.retentionPolicy
 
 
-
-Ensure mapping logic in ingestion script handles it, for example:
-Pythonentity["attributes"]["customAttributes"][attr] = valueShow more lines
+Ensure your loading script maps them into the Purview payload.
 
 
+---
 
-Changing Asset Type
+### Changing asset type
+
 Modify the typeName column:
-Python"typeName": "DataSet"Show more lines
-Supported examples:
 
-DataSet
-Table
-Column
-Custom types defined in Purview
+    DataSet
 
-
-Scaling Data Volume
-Update row generation logic:
-Pythonfor i in range(1, 101):Show more lines
-
-Design Considerations
-
-Excel-first approach simplifies customer adoption
-Works well for:
-
-Proof of Concepts (POCs)
-Data catalog onboarding
-Migration use cases
+Other examples:
+- Table
+- Column
+- Custom Purview types
 
 
-CSV fallback supports quick troubleshooting
-Custom attribute pattern aligns with flexible metadata modeling in Purview
+---
 
+### Changing dataset size
 
-Prerequisites
-Python Dependencies
-Shellpip install pandas openpyxlShow more lines
-Environment Requirements
+Modify the loop in the script:
+
+    for i in range(1, 101):
+
+---
+
+## Prerequisites
 
 Python 3.x
-Microsoft Purview account
-Azure AD authentication set up for API access
 
+Install required packages:
 
-Known Limitations
+    pip install pandas openpyxl
 
-No schema validation against Purview types
-Limited error handling (intended for demo/POC usage)
-Assumes attributes exist or are accepted dynamically
-Does not currently support:
+You also need:
+- Microsoft Purview account
+- Azure AD authentication configured for API access
 
-Relationships
-Lineage
-Classification assignments
+---
 
+## Design Notes
 
+- Excel-first design enables non-developers to participate
+- Useful for:
+  - Proof of Concepts
+  - Workshops
+  - Metadata onboarding
+- CSV output provides a simple fallback for troubleshooting
 
+---
 
-Suggested Enhancements
+## Known Limitations
 
-Add retry logic / error handling
-Add logging output for ingestion results
-Add support for relationships and lineage
-Introduce config file for API endpoint and auth
+- No schema validation against Purview types
+- Limited error handling (demo/POC focused)
+- Does not include:
+  - Relationships
+  - Lineage
+  - Classifications
 
-Summary
+---
+
+## Suggested Enhancements
+
+- Add logging
+- Add retry/error handling
+- Add configuration file for API settings
+- Extend to relationships and lineage
+
+---
+
+## Summary
+
 This solution provides:
+- A demo dataset generator
+- A reusable Excel-driven ingestion pattern
+- A flexible way to onboard metadata into Purview
 
-✅ A reusable Excel-based ingestion pattern
-✅ A demo data generator for rapid setup
-✅ A customer-ready workflow for bulk asset onboarding in Purview
+---
