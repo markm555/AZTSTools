@@ -154,6 +154,54 @@ You also need:
 
 ---
 
+## Permissions (Microsoft Purview)
+
+To use the BulkLoadFromExcel.py script, the Service Principal (SPN) used for authentication must have appropriate permissions in Microsoft Purview.
+
+### Required Role
+
+- **Data Curator** (minimum required)
+
+This role is required to:
+- Create new assets
+- Update existing assets
+- Set and modify metadata, including custom attributes
+
+### Scope
+
+Permissions must be assigned at the correct **collection level**:
+
+- Assign at the **target collection** where assets will be created  
+  OR  
+- Assign at the **root collection** to inherit access to all child collections
+
+### Important Notes
+
+- Microsoft Purview uses **collection-based RBAC**, not just Azure RBAC
+- Assigning permissions at the wrong collection will result in:
+  - Successful authentication
+  - But no assets created or visible via API
+- Ensure the SPN is explicitly added to the collection role assignment
+
+### Not Sufficient Roles
+
+- **Data Reader**
+  - Can browse/search assets
+  - Cannot create or update assets
+
+- **Collection Administrator**
+  - Not required for this scenario (higher privilege than needed)
+
+### Summary
+
+The Service Principal must be assigned:
+
+    Data Curator role on the target collection
+
+Without this role, API calls will not be able to create or update assets in Purview.
+
+---
+
 ## Design Notes
 
 - Excel-first design enables non-developers to participate
